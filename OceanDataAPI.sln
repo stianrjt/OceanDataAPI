@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31313.79
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OceanDataAPI", "OceanDataAPI\OceanDataAPI.csproj", "{3EF67B14-3812-4686-BE7D-3A1A209BF4C5}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{3EF67B14-3812-4686-BE7D-3A1A209BF4C5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3EF67B14-3812-4686-BE7D-3A1A209BF4C5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3EF67B14-3812-4686-BE7D-3A1A209BF4C5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3EF67B14-3812-4686-BE7D-3A1A209BF4C5}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {0A09A7EB-510D-4E2C-9ADD-0C65337C3AF1}
+	EndGlobalSection
+EndGlobal

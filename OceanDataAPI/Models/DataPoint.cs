@@ -9,8 +9,8 @@ namespace OceanDataAPI.Models
 	{
 		public Guid ID { get; set; }
 		public DateTimeOffset TimeStamp { get; set; }
-		public decimal Temperature { get; set; }
-		public decimal Salinity { get; set; }
+		public double Temperature { get; set; }
+		public double Salinity { get; set; }
 		public Location Location { get; set; }
 
 	}

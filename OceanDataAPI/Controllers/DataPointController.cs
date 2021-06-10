@@ -1,9 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using OceanDataAPI.Models;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace OceanDataAPI.Controllers
 {
@@ -31,11 +29,11 @@ namespace OceanDataAPI.Controllers
 					   select new DataPoint
 					   {
 						   ID = Guid.NewGuid(),
-						   Salinity = random.NextDouble()*10,
+						   Salinity = random.NextDouble() * 10,
 						   Temperature = random.Next(-20, 50),
 						   TimeStamp = DateTimeOffset.Now.AddSeconds(number),
 						   Location = location,
-						  };
+					   };
 
 			return Ok(data);
 

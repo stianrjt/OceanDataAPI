@@ -16,7 +16,9 @@ namespace OceanDataAPI.Repositories
 
 		public async Task<IEnumerable<DataPoint>> GetAll()
 		{
-			return await _context.DataPoints.ToListAsync();
+			return await _context.DataPoints
+				.Include(d => d.Location)
+				.ToListAsync();
 		}
 		
 		

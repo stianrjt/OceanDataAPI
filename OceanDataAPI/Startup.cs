@@ -1,9 +1,6 @@
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -12,10 +9,10 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Identity.Web;
 using Microsoft.OpenApi.Models;
 using OceanDataAPI.Data;
+using OceanDataAPI.Repositories;
+using OceanDataAPI.Services;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace OceanDataAPI
 {
@@ -44,6 +41,12 @@ namespace OceanDataAPI
 			{
 				c.SwaggerDoc("v1", new OpenApiInfo { Title = "OceanDataAPI", Version = "v1" });
 			});
+
+
+			services.AddScoped<IDataPointRepo, DataPointRepo>();
+			services.AddScoped<ILocationRepo, LocationRepo>();
+
+			services.AddTransient<IDataPointService, DataPointService>();
 		}
 
 
@@ -54,6 +57,30 @@ namespace OceanDataAPI
 				app.UseDeveloperExceptionPage();
 				app.UseSwagger();
 				app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "OceanDataAPI v1"));
+
+
+				// Seed Database
+				using var scope = app.ApplicationServices.CreateScope();
+				var scopedServices = scope.ServiceProvider;
+				var db = scopedServices.GetRequiredService<OceanDataContext>();
+				var logger = scopedServices
+					.GetRequiredService<ILogger<Startup>>();
+
+				db.Database.EnsureCreated();
+
+				try
+				{
+					if (!db.DataPoints.Any())
+					{
+						SeedData.Initialize(db);
+					}
+				}
+				catch (Exception ex)
+				{
+					logger.LogError(ex, "An error occurred seeding the " +
+						"database with test messages. Error: {Message}", ex.Message);
+				}
+
 			}
 
 			app.UseHttpsRedirection();

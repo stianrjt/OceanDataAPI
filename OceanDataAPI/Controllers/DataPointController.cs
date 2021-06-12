@@ -1,7 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
+using OceanDataAPI.DTOs;
 using OceanDataAPI.Models;
+using OceanDataAPI.Services;
 using System;
-using System.Linq;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace OceanDataAPI.Controllers
 {
@@ -9,34 +13,56 @@ namespace OceanDataAPI.Controllers
 	[Route("api/[controller]")]
 	public class DataPointController : ControllerBase
 	{
-		public DataPointController()
+		private readonly IDataPointService _service;
+		private readonly IMapper _mapper;
+		public DataPointController(IDataPointService service, IMapper mapper)
 		{
-
+			_service = service;
+			_mapper = mapper;
 		}
 
 
 		[HttpGet]
-		public IActionResult GetData()
+		public async Task<IActionResult> GetDataPoints()
 		{
-			Random random = new Random();
-			Location location = new Location
-			{
-				ID = Guid.NewGuid(),
-				Latitude = random.Next(516400146, 630304598).ToString(),
-				Longitude = random.Next(224464416, 341194152).ToString(),
-			};
-			var data = from number in Enumerable.Range(0, 5)
-					   select new DataPoint
-					   {
-						   ID = Guid.NewGuid(),
-						   Salinity = random.NextDouble() * 10,
-						   Temperature = random.Next(-20, 50),
-						   TimeStamp = DateTimeOffset.Now.AddSeconds(number),
-						   Location = location,
-					   };
+			var result = await _service.GetAll();
 
-			return Ok(data);
-
+			var dto = _mapper.Map<IEnumerable<DataPointDTO>>(result);
+			return Ok(result);
 		}
+
+
+		[HttpGet("{id}")]
+		public async Task<IActionResult> GetDataPointById(Guid id)
+		{
+			var result = await _service.GetDataPointById(id);
+
+			if (result == null)
+			{
+				return NotFound();
+			}
+
+			var dto = _mapper.Map<DataPointDTO>(result);
+			return Ok(dto);
+		}
+
+
+		[HttpPost]
+		public async Task<IActionResult> AddDataPoint(DataPointDTO dataPointDTO)
+		{
+			var dataPoint = _mapper.Map<DataPoint>(dataPointDTO);
+			var result = await _service.AddDataPoint(dataPoint);
+
+			if (result == null)
+			{
+				return NotFound();
+			}
+
+			var dto = _mapper.Map<DataPointDTO>(result);
+			return Ok(result);
+		}
+
+
+
 	}
 }
